@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>table test</title>
+</head>
+
+<body style="padding: 0px; margin: 0px;position: absolute;">
+    <input type="range" value="0" min="0" max="255" id="input">
+    <br><br>
+    <div style="width: 256px;">
+        <span>0</span>
+        <span style="float: right;">255</span>
+        <br>
+        <span id="inleft" style="padding: 0px; margin: 0px; position: absolute; ; color:red;">|</span>
+        <span id="inright" style="padding: 0px; margin: 0px; position: absolute; ; color:red;">|</span>
+        <span id="in" style="padding: 0px; margin: 0px; position: absolute;">|<br>
+            <div></div>
+        </span>
+        <hr>
+    </div>
+    <br><br>
+    <div style="width: 256px;">
+        <span>0</span>
+        <span style="float: right;">255</span>
+        <br>
+        <span id="outleft" style="padding: 0px; margin: 0px; position: absolute; left: 0px; color:red;">|</span>
+        <span id="outright" style="padding: 0px; margin: 0px; position: absolute; left: 255px; color:red;">|</span>
+        <span id="out" style="padding: 0px; margin: 0px; position: absolute; left: 0px;">|<br>
+            <div></div>
+        </span>
+        <hr>
+    </div>
+    <script type="text/javascript">
+    var table2 = table(13, 241),//bonzini
+        table1 = table(0, 255);//tornado
+    document.getElementById("in").style.left = "0px";
+    document.getElementById("in").querySelector("div").innerHTML = 0;
+    document.getElementById("out").style.left = "0px";
+    document.getElementById("out").querySelector("div").innerHTML = 0;
+
+    document.getElementById("outleft").style.left = table2.min + "px";
+    document.getElementById("outright").style.left = table2.max + "px";
+    document.getElementById("inleft").style.left = table1.min + "px";
+    document.getElementById("inright").style.left = table1.max + "px";
+
+    function table(goal_min, goal_max) {
+        return {
+            goal_width: Math.abs(goal_max - goal_min),
+            min: goal_min,
+            max: goal_max
+        };
+    }
+
+
+    function convert(pos, in_table, out_table) {
+        var val;
+        if (pos < in_table.min) {
+            val = map(pos, 0, in_table.min, 0, out_table.min);
+        } else if (pos > in_table.max) {
+            val = map(pos, in_table.max, 255, out_table.max, 255);
+        } else {
+            val = map(pos, in_table.min, in_table.max, out_table.min, out_table.max);
+        }
+        return Math.floor(val);
+    }
+
+    function map(x, inmin, inmax, outmin, outmax) {
+        return (x - inmin) * (outmax - outmin) / (inmax - inmin) + outmin;
+    }
+    document.getElementById("input").oninput = function() {
+        document.getElementById("in").style.left = document.getElementById("input").value + "px";
+        document.getElementById("in").querySelector("div").innerHTML = document.getElementById("input").value;
+
+        document.getElementById("out").style.left = convert(document.getElementById("input").value, table1, table2, true) + "px";
+        document.getElementById("out").querySelector("div").innerHTML = convert(document.getElementById("input").value, table1, table2, true);
+    }
+    </script>
+</body>
+
+</html>
