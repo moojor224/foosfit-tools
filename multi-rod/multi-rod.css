@@ -1,0 +1,15 @@
+canvas {
+    zoom: 50%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+li,
+ul,
+p {
+    margin: 0px;
+}
+
+#rodControl {
+    font-family: "monospace";
+}
