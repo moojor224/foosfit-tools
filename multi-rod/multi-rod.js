@@ -35,7 +35,8 @@ class Table {
             width: inchestomm(30),
             goal: inchestomm(8),
             rod_spacing: inchestomm(6),
-            wall: inchestomm(1)
+            wall: inchestomm(1),
+            team1: [0, 1, 3, 5],
         };
         Object.keys(config).forEach((k) => (defaults[k] = config[k]));
         this.config = defaults;
@@ -59,8 +60,7 @@ class Table {
     #Rod = class Rod {
         /**
          * initializes a new rod on the table
-         * @param {number} men number of men
-         * @param {number} position rod position
+         * @param {TableConfig} config number of men
          */
         constructor(config) {
             let defaults = {
@@ -83,7 +83,7 @@ class Table {
          */
         draw(ctx, table, offsetx, offsety) {
             // console.log("drawing", ctx, table, offsetx, offsety);
-            let { length, wall, width } = table.config;
+            let { length, wall, width, team1 } = table.config;
             let { index, color, man_count, man_spacing, bumper, man } = this.config;
             let center = length / 2 + wall + offsety;
             let rodCenter = inchestomm(6 * (index) - 21);
@@ -98,21 +98,19 @@ class Table {
 
 
 
-            let yellow = [0, 1, 3, 5];
             ctx.fillStyle = "#a0a0a0";// draw rod
-            let rodx = rodOffset + offsetx - rodTravel - (yellow.includes(index) ? 30 : 10);
+            let rodx = rodOffset + offsetx - rodTravel - (team1.includes(index) ? 30 : 10);
             let rodwidth = rodTravel + width + 2 * bumper + 40;
             ctx.fillRect(rodx, rodTop, rodwidth, inchestomm(5 / 8));
 
-            let handleLength = 120, handleThickness = 40;
+            let handleLength = 120, handleThickness = 40;// draw handle
+            let handlex = offsetx + rodOffset + (team1.includes(index) ? (-rodTravel - handleLength - 30) : (2 * wall + width + 30));
+            let handley = (rodTop + inchestomm(5 / 8) / 2) - handleThickness / 2;
             ctx.fillStyle = "black";
-            ctx.fillRect(offsetx + rodOffset + (yellow.includes(index) ? (-rodTravel - handleLength - 30) : (2 * wall + width + 30)), (rodTop + inchestomm(5 / 8) / 2) - handleThickness / 2, handleLength, handleThickness);
+            ctx.fillRect(handlex, handley, handleLength, handleThickness);
 
-
-
-
-
-
+            ctx.font = "50px monospace";// draw rod position
+            ctx.fillText(rodPos, handlex, handley + handleThickness + 55);
 
             ctx.fillStyle = "black";// draw bumpers
             ctx.fillRect(offsetx + wall + rodOffset, rodTop - 5, bumper, inchestomm(5 / 8) + 10);
