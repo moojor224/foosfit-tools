@@ -1,0 +1,106 @@
+.hidden {
+    display: none !important;
+}
+
+div.scrolling-tabs {
+    background-color: #1e1e1e;
+    color: white;
+    display: flex;
+    border-radius: 5px;
+    padding: 5px;
+    gap: 5px;
+
+    >div.scroll-button {
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: #fff2;
+        }
+
+        &:first-child {}
+    }
+
+
+
+    &,
+    >div.tablist {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        border-right: 1px solid #808080A0;
+        border-left: 1px solid #808080A0;
+        scroll-behavior: smooth;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    >div.tablist {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        /* transform:rotateX(180deg); */
+
+        >div.tab {
+            /* transform:rotateX(180deg); */
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            max-width: 200px;
+            min-width: 100px;
+            flex-grow: 100;
+            /* flex: 100 100; */
+            transition: background-color 0.1s;
+            font-size: 0px;
+            display: flex;
+            gap: 5px;
+            flex-wrap: nowrap;
+            justify-content: center;
+
+            &>img {
+                width: 16px;
+                height: 16px;
+            }
+
+            &>label {
+                overflow-x: hidden;
+                height: 1em;
+                font-size: 1rem;
+                flex-grow: 1;
+                text-overflow: clip;
+                white-space: nowrap;
+            }
+
+            &>button {
+                /* width: 16px;
+                height: 16px; */
+                margin: 0px;
+                padding: 0px;
+                border-radius: 50%;
+                border: none;
+                font-size: 16px;
+                text-align: center;
+                background-color: #0000;
+
+                &>i {
+                    color: white;
+                }
+                &:hover{
+                    background-color: #fff6;
+                }
+            }
+        }
+
+        >div.tab:hover {
+            background-color: #fff2;
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="tabs.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.css">
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <script src="../jstools.js"></script>
+</head>
+
+<body>
+    <div class="scrolling-tabs">
+        <div class="scroll-button left">
+            <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="tablist">
+            <div class="tab">
+                <img src="../favicon.png" alt="">
+                <label>tab nameasdasd</label>
+                <button>
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+        </div>
+        <div class="scroll-button right">
+            <i class="fa-solid fa-chevron-right"></i>
+        </div>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    hey
+    <script>
+        window.setInterval(function () {
+            /**
+             * @param {HTMLElement} list
+            */
+            [...document.querySelectorAll(".tablist")].forEach(function (list) {
+                if (list.scrollWidth > list.clientWidth) {
+                    showScrollButtons(list);
+                } else {
+                    hideScrollButtons(list);
+                }
+                list.onwheel = function (event) {
+                    event.preventDefault();
+                    list.scrollLeft -= event.wheelDelta * 2;
+                }
+            });
+            [...document.querySelectorAll(".scroll-button:active")].forEach(function (el) {
+                let scrollAmount = 10;
+                if (el.classList.contains("left")) {
+                    el.parentElement.querySelector(".tablist").scrollLeft -= scrollAmount;
+                } else {
+                    el.parentElement.querySelector(".tablist").scrollLeft += scrollAmount;
+                }
+            });
+        }, 10);
+        function showScrollButtons(list) {
+            console.log("show");
+            [...list.parentElement.querySelectorAll(".scroll-button")].forEach(e => {
+                e.classList.remove("hidden");
+            });
+        }
+        function hideScrollButtons(list) {
+            console.log("hide");
+            [...list.parentElement.querySelectorAll(".scroll-button")].forEach(e => {
+                e.classList.add("hidden");
+            });
+        }
+        function newTab(name, src = "") {
+            document.querySelector(".tablist").add(
+                createElement("div", { classList: "tab" }).add(
+                    createElement("img", { src: "../favicon.png"}),
+                    createElement("label", { innerHTML: "tab nameasdasd" }),
+                    createElement("button").add(
+                        createElement("i", { classList: "fa-solid fa-xmark" }),
+                    ),
+                )
+            );
+        }
+        newTab("test");
+    </script>
+</body>
+
+</html>

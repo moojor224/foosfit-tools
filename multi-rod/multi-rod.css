@@ -1,7 +1,15 @@
 canvas {
-    zoom: 50%;
+    /* -webkit-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    transform: scale(0.5); */
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    border: 5px solid black;
+}
+
+body {
+    display: flex;
 }
 
 li,
