@@ -1,4 +1,4 @@
-import { createElement, map } from "/jstools.js";
+import { createElement, map } from "../jstools.js";
 function inchestomm(inches) {
     return Math.round(inches * 25.4);
 }
