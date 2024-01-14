@@ -118,9 +118,9 @@ class Table {
          */
         constructor(config) {
             let defaults = {
-                bumper: inchestomm(1),
-                man: inchestomm(1.25),
-                man_spacing: inchestomm(8),
+                bumper: inchestomm(1), // bumper width
+                man: inchestomm(1.25), // man width
+                man_spacing: inchestomm(8), // center-to-center
                 man_count: 3,
                 index: 0,
                 color: "red"
@@ -311,10 +311,6 @@ class Table {
 
         // adapt bound child tables
         this.boundChildren.forEach(child => {
-            // this.rods.forEach(rod => {
-            //     let index = rod.config.index;
-            //     let val = this.rodControl.querySelector(`input[data-index="${index}"]`).value;
-            // });
             if (child.funcset.all) {
                 for (let i = 0; i < 8; i++) {
                     child.funcset.all(this, child.table, i);
