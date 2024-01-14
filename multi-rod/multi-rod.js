@@ -344,8 +344,17 @@ class Table {
             table,
             funcset
         });
-        table.rodControl.style.display = "none";
-        table.rodControl.insertAdjacentElement("afterend", createElement("div", { innerHTML: `linked to: ${this.config.name}` }));
+        let label = "heyo";
+        if (funcset.goalie) {
+            table.rodControl.querySelector(`input[data-index='0']`).parentElement.style.display = "none";
+            table.rodControl.querySelector(`input[data-index='7']`).parentElement.style.display = "none";
+            label = `linked to: ${this.config.name}. some controls unavailable`;
+        }
+        if (funcset.all) {
+            table.rodControl.style.display = "none";
+            label = `linked to: ${this.config.name}. all controls unavailable`;
+        }
+        table.rodControl.insertAdjacentElement("beforebegin", createElement("div", { innerHTML: label }));
 
     }
 
@@ -512,8 +521,8 @@ tornado1.bind(tornado2, {
 
 function figureOutGoalBounds(table) {
     let { offsetx, wall, width, goal } = table.config;
-    let { man_count, man_spacing, man, bumper } = rod.config;
     let rod = table.rods.filter(r => r.config.index == 0)[0];
+    let { man_count, man_spacing, man, bumper } = rod.config;
     let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
 
     let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
@@ -524,5 +533,5 @@ function figureOutGoalBounds(table) {
     return ({
         min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
         max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
-    })
+    });
 }
