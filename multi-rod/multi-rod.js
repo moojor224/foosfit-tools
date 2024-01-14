@@ -489,13 +489,29 @@ tornado2.addRod({// black 3-rod
 });
 tornado2.render();
 
-function flatConvert(intable, outtable, index) {
+function figureOutGoalBounds(table) {
+    let { offsetx, wall, width, goal } = table.config;
+    let rod = table.rods.filter(r => r.config.index == 0)[0];
+    let { man_count, man_spacing, man, bumper } = rod.config;
+    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
+
+    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
+    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
+    let goalRight = goalLeft + goal;
+    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
+
+    return ({
+        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
+        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
+    });
+}
+
+function flatConvert(intable, outtable, index) { // 1-1 direct convert
     outtable.rodControl.querySelector(`input[data-index="${index}"]`).value = intable.rodControl.querySelector(`input[data-index="${index}"]`).value;
 }
 
-function simpleGoalConvert(in_table, out_table, index) {
+function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
     let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value;
-    let rod = out_table.rods.filter(r => r.config.index == index)[0];
     let i = figureOutGoalBounds(in_table);
     let o = figureOutGoalBounds(out_table);
     let val;
@@ -514,20 +530,3 @@ tornado1.bind(tornado2, {
     all: flatConvert,
     goalie: simpleGoalConvert
 });
-
-function figureOutGoalBounds(table) {
-    let { offsetx, wall, width, goal } = table.config;
-    let rod = table.rods.filter(r => r.config.index == 0)[0];
-    let { man_count, man_spacing, man, bumper } = rod.config;
-    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
-
-    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
-    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
-    let goalRight = goalLeft + goal;
-    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
-
-    return ({
-        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
-        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
-    });
-}
