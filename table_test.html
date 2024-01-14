@@ -34,8 +34,8 @@
         <hr>
     </div>
     <script type="text/javascript">
-    var table2 = table(13, 241),//bonzini
-        table1 = table(0, 255);//tornado
+    var table1 = table(13, 241),
+        table2 = table(40, 215);
     document.getElementById("in").style.left = "0px";
     document.getElementById("in").querySelector("div").innerHTML = 0;
     document.getElementById("out").style.left = "0px";
@@ -56,7 +56,7 @@
 
 
     function convert(pos, in_table, out_table) {
-        var val;
+        let val;
         if (pos < in_table.min) {
             val = map(pos, 0, in_table.min, 0, out_table.min);
         } else if (pos > in_table.max) {
