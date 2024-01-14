@@ -511,17 +511,16 @@ tornado1.bind(tornado2, {
 });
 
 function figureOutGoalBounds(table) {
-    let goalWidth = table.config.goal;
-    let tableWidth = table.config.width;
+    let { offsetx, wall, width, goal } = table.config;
+    let { man_count, man_spacing, man, bumper } = rod.config;
     let rod = table.rods.filter(r => r.config.index == 0)[0];
-    let rodLength = (rod.config.man_count - 1) * rod.config.man_spacing + rod.config.man + 2 * rod.config.bumper;
+    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
 
-    let rodCenterLeft = table.config.offsetx + universalPadding + table.config.wall + rodLength / 2;
-    let goalLeft = table.config.offsetx + table.config.wall + (table.config.width - table.config.goal) / 2 + universalPadding;
-    let goalRight = goalLeft + table.config.goal;
-    let rodCenterRight = table.config.offsetx + universalPadding + table.config.wall + table.config.width - (rodLength / 2);
+    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
+    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
+    let goalRight = goalLeft + goal;
+    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
 
-    console.log(goalLeft, goalRight, rodCenterLeft, rodCenterRight);
     return ({
         min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
         max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
