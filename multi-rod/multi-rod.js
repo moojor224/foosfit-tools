@@ -5,7 +5,7 @@ function inchestomm(inches) {
 
 let tables = [];
 let universalPadding = 20;
-let shrink = 3.75;
+let shrink = 5;
 class Table {
     /**
      * @type {Rod[]}
@@ -488,6 +488,63 @@ tornado2.addRod({// black 3-rod
     color: "black"
 });
 tornado2.render();
+let tornado3 = new Table({
+    length: inchestomm(48),
+    width: inchestomm(40),
+    goal: inchestomm(8),
+    rod_spacing: inchestomm(6),
+    wall: inchestomm(1),
+    name: "tornado2",
+});
+tornado3.addRod({// yellow goalie
+    man_spacing: inchestomm(8.125),
+    man_count: 3,
+    index: 0,
+    color: "yellow"
+});
+tornado3.addRod({// yellow 2-rod
+    man_spacing: inchestomm(9.5),
+    man_count: 2,
+    index: 1,
+    color: "yellow"
+});
+tornado3.addRod({// yellow 5-rod
+    man_spacing: inchestomm(4.75),
+    man_count: 5,
+    index: 3,
+    color: "yellow"
+});
+tornado3.addRod({// yellow 3-rod
+    man_spacing: inchestomm(7.25),
+    man_count: 3,
+    index: 5,
+    color: "yellow"
+});
+tornado3.addRod({//black goalie
+    man_spacing: inchestomm(8.125),
+    man_count: 3,
+    index: 7,
+    color: "black"
+});
+tornado3.addRod({// black 2-rod
+    man_spacing: inchestomm(9.5),
+    man_count: 2,
+    index: 6,
+    color: "black"
+});
+tornado3.addRod({// black 5-rod
+    man_spacing: inchestomm(4.75),
+    man_count: 5,
+    index: 4,
+    color: "black"
+});
+tornado3.addRod({// black 3-rod
+    man_spacing: inchestomm(7.25),
+    man_count: 3,
+    index: 2,
+    color: "black"
+});
+tornado3.render();
 
 function figureOutGoalBounds(table) {
     let { offsetx, wall, width, goal } = table.config;
@@ -528,5 +585,9 @@ function simpleGoalConvert(in_table, out_table, index) { // same logic as table 
 
 tornado1.bind(tornado2, {
     all: flatConvert,
-    goalie: simpleGoalConvert
+    goalie: simpleGoalConvert,
+});
+tornado2.bind(tornado3, {
+    all: flatConvert,
+    goalie: simpleGoalConvert,
 });
