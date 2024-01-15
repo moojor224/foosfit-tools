@@ -13,12 +13,12 @@ class Table {
     rods = [];
     /**
      * @typedef  {Object}   TableConfig 
-     * @property {number}   length      length of the field
-     * @property {number}   width       width of the field
-     * @property {number}   goal        goal width
-     * @property {number}   rod_spacing center-to-center spacing of the rods
-     * @property {number}   wall        thickness of the field wall
-     * @property {number[]} team1       array of the rod indeces corresponding to the team whose handles are on the left
+     * @property {Number}   length      length of the field
+     * @property {Number}   width       width of the field
+     * @property {Number}   goal        goal width
+     * @property {Number}   rod_spacing center-to-center spacing of the rods
+     * @property {Number}   wall        thickness of the field wall
+     * @property {Number[]} team1       array of the rod indeces corresponding to the team whose handles are on the left
      * @method   test
      */
     /**
@@ -35,6 +35,7 @@ class Table {
             wall: inchestomm(1),
             team1: [0, 1, 3, 5],
             name: "unnamed table",
+            colors: ["green", "yellow", "black"]
         };
         Object.keys(config).forEach((k) => (defaults[k] = config[k]));
         this.config = defaults;
@@ -86,13 +87,13 @@ class Table {
         tables.push(this);
     }
     /**
-     * @typedef RodOptions
-     * @property {number} bumper      width of the bumper
-     * @property {number} man         width of the man
-     * @property {number} man_spacing center-to-center spacing between men
-     * @property {number} man_count   number of men
-     * @property {number} index       rod index
-     * @property {string} color       
+     * @typedef {Object} RodOptions
+     * @property {Number} bumper      width of the bumper
+     * @property {Number} man         width of the man
+     * @property {Number} man_spacing center-to-center spacing between men
+     * @property {Number} man_count   number of men
+     * @property {Number} index       rod index
+     * @property {Number} team        which team the rod belogs to
      */
     /**
      * adds a new rod to the table defined by dimensions
@@ -108,13 +109,10 @@ class Table {
      * @property {Object} config
      */
     #Rod = class {
-        /**
-         * 
-         */
         config = {};
         /**
-         * initializes a new rod on the table
-         * @param {TableConfig} config number of men
+         * adds a new rod to the table defined by dimensions
+         * @param {RodOptions} config rod measurements
          */
         constructor(config) {
             let defaults = {
@@ -123,7 +121,7 @@ class Table {
                 man_spacing: inchestomm(8), // center-to-center
                 man_count: 3,
                 index: 0,
-                color: "red"
+                team: "red"
             };
             Object.keys(config).forEach((k) => (defaults[k] = config[k]));
             this.config = defaults;
@@ -139,7 +137,7 @@ class Table {
         draw(ctx, table, offsetx) {
             // console.log("drawing", ctx, table, offsetx, 0);
             let { length, wall, width, team1 } = table.config;
-            let { index, color, man_count, man_spacing, bumper, man } = this.config;
+            let { index, team, man_count, man_spacing, bumper, man } = this.config;
             let center = length / 2 + wall;
             let rodCenter = inchestomm(6 * (index) - 21);
             let rodTop = rodCenter - (inchestomm(5 / 8) / 2) + center;
@@ -169,7 +167,7 @@ class Table {
             ctx.fillRect(offsetx + wall + rodOffset + universalPadding, rodTop - 5 + universalPadding, bumper, inchestomm(5 / 8) + 10); // left bumper
             ctx.fillRect(offsetx + wall + rodOffset + rodLength - bumper + universalPadding, rodTop - 5 + universalPadding, bumper, inchestomm(5 / 8) + 10); // right bumper
 
-            ctx.fillStyle = color;// draw men
+            ctx.fillStyle = table.config.colors[team];// draw men
             for (let i = 0; i < man_count; i++) {
                 ctx.fillRect(offsetx + wall + bumper + i * (man_spacing) + rodOffset + universalPadding, rodTop - 10 + universalPadding, man, 90);
             }
@@ -228,7 +226,7 @@ class Table {
         ctx.imageSmoothingEnabled = false;
         ctx.rect(100, 0, width, length);
         let borderColor = "black";
-        let fieldColor = "green";
+        let fieldColor = this.config.colors[0];
 
         this.canvas.setAttribute("width", this.canvasWidth / shrink);
         this.canvas.setAttribute("height", this.canvasHeight / shrink);
@@ -328,7 +326,7 @@ class Table {
         return table.boundChildren.filter(e => e.table == this).length > 0;
     }
     /**
-     * 
+     * binds a table
      * @param {Table} table 
      * @returns {void}
      */
@@ -372,179 +370,69 @@ CanvasRenderingContext2D.prototype.drawPolygon = function (points) {
     this.stroke();
 }
 
-let tornado1 = new Table({
-    length: inchestomm(48),
-    width: inchestomm(30),
-    goal: inchestomm(8),
-    rod_spacing: inchestomm(6),
-    wall: inchestomm(1),
-    name: "tornado1",
-});
-tornado1.addRod({// yellow goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 0,
-    color: "yellow"
-});
-tornado1.addRod({// yellow 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 1,
-    color: "yellow"
-});
-tornado1.addRod({// yellow 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 3,
-    color: "yellow"
-});
-tornado1.addRod({// yellow 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 5,
-    color: "yellow"
-});
-tornado1.addRod({//black goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 7,
-    color: "black"
-});
-tornado1.addRod({// black 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 6,
-    color: "black"
-});
-tornado1.addRod({// black 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 4,
-    color: "black"
-});
-tornado1.addRod({// black 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 2,
-    color: "black"
-});
-tornado1.render();
+function tornado() {
+    let tornado1 = new Table({
+        length: inchestomm(48),
+        width: inchestomm(30),
+        goal: inchestomm(8),
+        rod_spacing: inchestomm(6),
+        wall: inchestomm(1),
+        name: "tornado1",
+        colors: ["green", "yellow", "black"],
+    });
+    tornado1.addRod({// yellow goalie
+        man_spacing: inchestomm(8.125),
+        man_count: 3,
+        index: 0,
+        team: 1
+    });
+    tornado1.addRod({// yellow 2-rod
+        man_spacing: inchestomm(9.5),
+        man_count: 2,
+        index: 1,
+        team: 1
+    });
+    tornado1.addRod({// yellow 5-rod
+        man_spacing: inchestomm(4.75),
+        man_count: 5,
+        index: 3,
+        team: 1
+    });
+    tornado1.addRod({// yellow 3-rod
+        man_spacing: inchestomm(7.25),
+        man_count: 3,
+        index: 5,
+        team: 1
+    });
+    tornado1.addRod({//black goalie
+        man_spacing: inchestomm(8.125),
+        man_count: 3,
+        index: 7,
+        team: 2
+    });
+    tornado1.addRod({// black 2-rod
+        man_spacing: inchestomm(9.5),
+        man_count: 2,
+        index: 6,
+        team: 2
+    });
+    tornado1.addRod({// black 5-rod
+        man_spacing: inchestomm(4.75),
+        man_count: 5,
+        index: 4,
+        team: 2
+    });
+    tornado1.addRod({// black 3-rod
+        man_spacing: inchestomm(7.25),
+        man_count: 3,
+        index: 2,
+        team: 2
+    });
+    tornado1.render();
+    return tornado1;
+}
 
 
-let tornado2 = new Table({
-    length: inchestomm(48),
-    width: inchestomm(40),
-    goal: inchestomm(8),
-    rod_spacing: inchestomm(6),
-    wall: inchestomm(1),
-    name: "tornado2",
-});
-tornado2.addRod({// yellow goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 0,
-    color: "yellow"
-});
-tornado2.addRod({// yellow 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 1,
-    color: "yellow"
-});
-tornado2.addRod({// yellow 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 3,
-    color: "yellow"
-});
-tornado2.addRod({// yellow 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 5,
-    color: "yellow"
-});
-tornado2.addRod({//black goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 7,
-    color: "black"
-});
-tornado2.addRod({// black 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 6,
-    color: "black"
-});
-tornado2.addRod({// black 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 4,
-    color: "black"
-});
-tornado2.addRod({// black 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 2,
-    color: "black"
-});
-tornado2.render();
-let tornado3 = new Table({
-    length: inchestomm(48),
-    width: inchestomm(40),
-    goal: inchestomm(8),
-    rod_spacing: inchestomm(6),
-    wall: inchestomm(1),
-    name: "tornado2",
-});
-tornado3.addRod({// yellow goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 0,
-    color: "yellow"
-});
-tornado3.addRod({// yellow 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 1,
-    color: "yellow"
-});
-tornado3.addRod({// yellow 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 3,
-    color: "yellow"
-});
-tornado3.addRod({// yellow 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 5,
-    color: "yellow"
-});
-tornado3.addRod({//black goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 7,
-    color: "black"
-});
-tornado3.addRod({// black 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 6,
-    color: "black"
-});
-tornado3.addRod({// black 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 4,
-    color: "black"
-});
-tornado3.addRod({// black 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 2,
-    color: "black"
-});
-tornado3.render();
 
 function figureOutGoalBounds(table) {
     let { offsetx, wall, width, goal } = table.config;
@@ -582,6 +470,66 @@ function simpleGoalConvert(in_table, out_table, index) { // same logic as table 
     val = Math.floor(val);
     out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = val;
 }
+let tornado1 = tornado();
+let tornado2 = new Table({
+    length: inchestomm(48),
+    width: inchestomm(40),
+    goal: inchestomm(8),
+    rod_spacing: inchestomm(6),
+    wall: inchestomm(1),
+    name: "tornado2",
+});
+tornado2.addRod({// yellow goalie
+    man_spacing: inchestomm(8.125),
+    man_count: 3,
+    index: 0,
+    team: 1
+});
+tornado2.addRod({// yellow 2-rod
+    man_spacing: inchestomm(9.5),
+    man_count: 2,
+    index: 1,
+    team: 1
+});
+tornado2.addRod({// yellow 5-rod
+    man_spacing: inchestomm(4.75),
+    man_count: 5,
+    index: 3,
+    team: 1
+});
+tornado2.addRod({// yellow 3-rod
+    man_spacing: inchestomm(7.25),
+    man_count: 3,
+    index: 5,
+    team: 1
+});
+tornado2.addRod({//black goalie
+    man_spacing: inchestomm(8.125),
+    man_count: 3,
+    index: 7,
+    team: 2
+});
+tornado2.addRod({// black 2-rod
+    man_spacing: inchestomm(9.5),
+    man_count: 2,
+    index: 6,
+    team: 2
+});
+tornado2.addRod({// black 5-rod
+    man_spacing: inchestomm(4.75),
+    man_count: 5,
+    index: 4,
+    team: 2
+});
+tornado2.addRod({// black 3-rod
+    man_spacing: inchestomm(7.25),
+    man_count: 3,
+    index: 2,
+    team: 2
+});
+tornado2.render();
+
+let tornado3 = tornado();
 
 tornado1.bind(tornado2, {
     all: flatConvert,
