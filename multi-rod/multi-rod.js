@@ -79,7 +79,7 @@ class Table {
             );
         }
         this.rodControl = rodControl;
-        document.body.add(createElement("div").add(
+        document.querySelector("div.output").add(createElement("div").add(
             this.canvas,
             createElement("br"),
             rodControl

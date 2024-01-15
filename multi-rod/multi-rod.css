@@ -8,7 +8,7 @@ canvas {
     border: 5px solid black;
 }
 
-body {
+div.output {
     display: flex;
     flex-wrap: wrap;
 }
