@@ -370,6 +370,47 @@ CanvasRenderingContext2D.prototype.drawPolygon = function (points) {
     this.stroke();
 }
 
+
+
+
+function figureOutGoalBounds(table) {
+    let { offsetx, wall, width, goal } = table.config;
+    let rod = table.rods.filter(r => r.config.index == 0)[0];
+    let { man_count, man_spacing, man, bumper } = rod.config;
+    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
+
+    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
+    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
+    let goalRight = goalLeft + goal;
+    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
+
+    return ({
+        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
+        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
+    });
+}
+
+function flatConvert(intable, outtable, index) { // 1-1 direct convert
+    outtable.rodControl.querySelector(`input[data-index="${index}"]`).value = intable.rodControl.querySelector(`input[data-index="${index}"]`).value;
+}
+
+function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
+    let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value;
+    let i = figureOutGoalBounds(in_table);
+    let o = figureOutGoalBounds(out_table);
+    let val;
+    if (pos < i.min) {
+        val = map(pos, 0, i.min, 0, o.min);
+    } else if (pos < i.max) {
+        val = map(pos, i.min, i.max, o.min, o.max);
+    } else {
+        val = map(pos, i.max, 255, o.max, 255);
+    }
+    val = Math.floor(val);
+    out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = val;
+}
+
+
 function tornado() {
     let tornado1 = new Table({
         length: inchestomm(48),
@@ -432,44 +473,6 @@ function tornado() {
     return tornado1;
 }
 
-
-
-function figureOutGoalBounds(table) {
-    let { offsetx, wall, width, goal } = table.config;
-    let rod = table.rods.filter(r => r.config.index == 0)[0];
-    let { man_count, man_spacing, man, bumper } = rod.config;
-    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
-
-    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
-    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
-    let goalRight = goalLeft + goal;
-    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
-
-    return ({
-        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
-        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
-    });
-}
-
-function flatConvert(intable, outtable, index) { // 1-1 direct convert
-    outtable.rodControl.querySelector(`input[data-index="${index}"]`).value = intable.rodControl.querySelector(`input[data-index="${index}"]`).value;
-}
-
-function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
-    let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value;
-    let i = figureOutGoalBounds(in_table);
-    let o = figureOutGoalBounds(out_table);
-    let val;
-    if (pos < i.min) {
-        val = map(pos, 0, i.min, 0, o.min);
-    } else if (pos < i.max) {
-        val = map(pos, i.min, i.max, o.min, o.max);
-    } else {
-        val = map(pos, i.max, 255, o.max, 255);
-    }
-    val = Math.floor(val);
-    out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = val;
-}
 let tornado1 = tornado();
 let tornado2 = new Table({
     length: inchestomm(48),
