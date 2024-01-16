@@ -1,12 +1,13 @@
 import { createElement, map } from "../jstools.js";
-function inchestomm(inches) {
+
+export function inchestomm(inches) {
     return Math.round(inches * 25.4);
 }
 
 let tables = [];
 let universalPadding = 20;
 let shrink = 5;
-class Table {
+export class Table {
     /**
      * @type {Rod[]}
      */
@@ -374,32 +375,32 @@ CanvasRenderingContext2D.prototype.drawPolygon = function (points) {
 
 
 function figureOutGoalBounds(table) {
-    let { offsetx, wall, width, goal } = table.config;
-    let rod = table.rods.filter(r => r.config.index == 0)[0];
-    let { man_count, man_spacing, man, bumper } = rod.config;
-    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
+    let { offsetx, wall, width, goal } = table.config; // get table config
+    let rod = table.rods.filter(r => r.config.index == 0)[0]; // get a goalie rod (in this case, it's just the rod at index 0)
+    let { man_count, man_spacing, man, bumper } = rod.config; // get rod config
+    let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper; // length of rod from bumper to bumper
 
-    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2;
-    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding;
-    let goalRight = goalLeft + goal;
-    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2);
+    let rodCenterLeft = offsetx + universalPadding + wall + rodLength / 2; // x-coordinate of middle of rid when moved all the way to the left
+    let goalLeft = offsetx + wall + (width - goal) / 2 + universalPadding; // x-coordinate of left side of goal
+    let goalRight = goalLeft + goal; // x-coordinate of right side of goal
+    let rodCenterRight = offsetx + universalPadding + wall + width - (rodLength / 2); // x-coordinate of middle of rid when moved all the way to the right
 
     return ({
-        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255),
-        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255),
+        min: map(goalLeft, rodCenterLeft, rodCenterRight, 0, 255), // rod position when middle man is at goal left
+        max: map(goalRight, rodCenterLeft, rodCenterRight, 0, 255), // rod position when middle man is at goal right
     });
 }
 
-function flatConvert(intable, outtable, index) { // 1-1 direct convert
-    outtable.rodControl.querySelector(`input[data-index="${index}"]`).value = intable.rodControl.querySelector(`input[data-index="${index}"]`).value;
+export function flatConvert(in_table, out_table, index) { // 1-1 direct convert
+    out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value; // set the value without any math done to it
 }
 
-function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
-    let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value;
-    let i = figureOutGoalBounds(in_table);
-    let o = figureOutGoalBounds(out_table);
-    let val;
-    if (pos < i.min) {
+export function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
+    let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value; // get rod pos (0-255)
+    let i = figureOutGoalBounds(in_table); // get min/max positions for goalie rod to block goal with middle man
+    let o = figureOutGoalBounds(out_table); // get min/max positions for goalie rod to block goal with middle man
+    let val; // result value
+    if (pos < i.min) { // do the math
         val = map(pos, 0, i.min, 0, o.min);
     } else if (pos < i.max) {
         val = map(pos, i.min, i.max, o.min, o.max);
@@ -407,138 +408,7 @@ function simpleGoalConvert(in_table, out_table, index) { // same logic as table 
         val = map(pos, i.max, 255, o.max, 255);
     }
     val = Math.floor(val);
-    out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = val;
+    out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = val; // set the value
 }
 
 
-function tornado() {
-    let tornado1 = new Table({
-        length: inchestomm(48),
-        width: inchestomm(30),
-        goal: inchestomm(8),
-        rod_spacing: inchestomm(6),
-        wall: inchestomm(1),
-        name: "tornado1",
-        colors: ["green", "yellow", "black"],
-    });
-    tornado1.addRod({// yellow goalie
-        man_spacing: inchestomm(8.125),
-        man_count: 3,
-        index: 0,
-        team: 1
-    });
-    tornado1.addRod({// yellow 2-rod
-        man_spacing: inchestomm(9.5),
-        man_count: 2,
-        index: 1,
-        team: 1
-    });
-    tornado1.addRod({// yellow 5-rod
-        man_spacing: inchestomm(4.75),
-        man_count: 5,
-        index: 3,
-        team: 1
-    });
-    tornado1.addRod({// yellow 3-rod
-        man_spacing: inchestomm(7.25),
-        man_count: 3,
-        index: 5,
-        team: 1
-    });
-    tornado1.addRod({//black goalie
-        man_spacing: inchestomm(8.125),
-        man_count: 3,
-        index: 7,
-        team: 2
-    });
-    tornado1.addRod({// black 2-rod
-        man_spacing: inchestomm(9.5),
-        man_count: 2,
-        index: 6,
-        team: 2
-    });
-    tornado1.addRod({// black 5-rod
-        man_spacing: inchestomm(4.75),
-        man_count: 5,
-        index: 4,
-        team: 2
-    });
-    tornado1.addRod({// black 3-rod
-        man_spacing: inchestomm(7.25),
-        man_count: 3,
-        index: 2,
-        team: 2
-    });
-    tornado1.render();
-    return tornado1;
-}
-
-let tornado1 = tornado();
-let tornado2 = new Table({
-    length: inchestomm(48),
-    width: inchestomm(40),
-    goal: inchestomm(8),
-    rod_spacing: inchestomm(6),
-    wall: inchestomm(1),
-    name: "tornado2",
-});
-tornado2.addRod({// yellow goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 0,
-    team: 1
-});
-tornado2.addRod({// yellow 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 1,
-    team: 1
-});
-tornado2.addRod({// yellow 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 3,
-    team: 1
-});
-tornado2.addRod({// yellow 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 5,
-    team: 1
-});
-tornado2.addRod({//black goalie
-    man_spacing: inchestomm(8.125),
-    man_count: 3,
-    index: 7,
-    team: 2
-});
-tornado2.addRod({// black 2-rod
-    man_spacing: inchestomm(9.5),
-    man_count: 2,
-    index: 6,
-    team: 2
-});
-tornado2.addRod({// black 5-rod
-    man_spacing: inchestomm(4.75),
-    man_count: 5,
-    index: 4,
-    team: 2
-});
-tornado2.addRod({// black 3-rod
-    man_spacing: inchestomm(7.25),
-    man_count: 3,
-    index: 2,
-    team: 2
-});
-tornado2.render();
-
-let tornado3 = tornado();
-
-tornado1.bind(tornado2, {
-    all: flatConvert,
-    goalie: simpleGoalConvert,
-});
-tornado2.bind(tornado3, {
-    all: flatConvert,
-    goalie: simpleGoalConvert,
-});
