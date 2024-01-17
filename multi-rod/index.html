@@ -14,7 +14,17 @@
 <body>
     <img src="./tutorial.png" alt="tutorial" height="400px"><br>
     <div class="output"></div>
-    <script type="module" src="./app.js"></script>
+    <script src="../jstools.js"></script>
+    <script src="./multi-rod.js"></script>
+    <script src="./app.js"></script>
+    <script>
+        // auto-reload script. please ignore
+        let address = "ws://localhost:5502/ws";
+        let socket = new WebSocket(address);
+        socket.onmessage = function (msg) {
+            if (msg.data == 'reload') window.location.reload();
+        };
+    </script>
 </body>
 
 </html>

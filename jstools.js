@@ -4,7 +4,7 @@
  * @param {Object} data data
  * @returns {HTMLElement}
  */
-export function createElement(tag = "span", data = {}) {
+function createElement(tag = "span", data = {}) {
     tag = typeof (tag) === "string" ? document.createElement(tag) : tag;
     Object.keys(data).forEach(e => {
         if (typeof data[e] === "object") {
@@ -23,6 +23,6 @@ window.Element.prototype.add = function (...args) {
     return this;
 }
 
-export function map(x, inmin, inmax, outmin, outmax) {
+function map(x, inmin, inmax, outmin, outmax) {
     return (x - inmin) * (outmax - outmin) / (inmax - inmin) + outmin;
 }

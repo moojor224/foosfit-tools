@@ -1,13 +1,16 @@
-import { createElement, map } from "../jstools.js";
 
-export function inchestomm(inches) {
+
+function inchestomm(inches) {
     return Math.round(inches * 25.4);
+}
+function mmtoinches(inches) {
+    return Math.round(inches / 25.4);
 }
 
 let tables = [];
 let universalPadding = 20;
-let shrink = 5;
-export class Table {
+let shrink = 4;
+class Table {
     /**
      * @type {Rod[]}
      */
@@ -137,11 +140,10 @@ export class Table {
          */
         draw(ctx, table, offsetx) {
             // console.log("drawing", ctx, table, offsetx, 0);
-            let { length, wall, width, team1 } = table.config;
+            let { length, wall, width, team1, rod_spacing } = table.config;
             let { index, team, man_count, man_spacing, bumper, man } = this.config;
-            let center = length / 2 + wall;
-            let rodCenter = inchestomm(6 * (index) - 21);
-            let rodTop = rodCenter - (inchestomm(5 / 8) / 2) + center;
+            let rodCenter = ((length / 2) + wall) + rod_spacing * (index - 3.5);
+            let rodTop = rodCenter - (inchestomm(5 / 8) / 2);
 
             let rodPos = table.rodControl.querySelector(`input[data-index="${index}"]`)?.value;
             let rodLength = (man_count - 1) * man_spacing + man + 2 * bumper;
@@ -210,7 +212,7 @@ export class Table {
         let { xmin, xmax } = this.calculateCanvas();
         let { wall, width, length } = this.config;
         this.canvasWidth = xmax - xmin + universalPadding * 2;
-        this.canvasHeight = 2 * wall + length + universalPadding * 2;
+        this.canvasHeight = 2 * wall + length + universalPadding * 2 + 50;
         this.canvas.setAttribute("width", 0);
         this.canvas.setAttribute("height", 0);
         this.config.offsetx = (xmax - xmin) / 2 - width / 2 - wall;
@@ -221,7 +223,7 @@ export class Table {
      * @param {HTMLCanvasElement} this.canvas 
      */
     render() {
-        let { width, length, wall, goal } = this.config;
+        let { width, length, wall, goal, name, offsetx } = this.config;
         let ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.imageSmoothingEnabled = false;
@@ -307,6 +309,10 @@ export class Table {
             { x: this.config.offsetx + this.config.wall + universalPadding, y: this.config.wall + this.config.length + universalPadding },
             { x: this.config.offsetx + this.config.wall + universalPadding, y: 0 + universalPadding },
         ]);
+        ctx.font = "50px monospace";
+        ctx.fillStyle = "black";
+        console.log();
+        ctx.fillText(name, universalPadding + offsetx + wall + (-ctx.measureText(name).width + width) / 2, length + 2 * (universalPadding + wall) + 30);
 
         // adapt bound child tables
         this.boundChildren.forEach(child => {
@@ -391,11 +397,11 @@ function figureOutGoalBounds(table) {
     });
 }
 
-export function flatConvert(in_table, out_table, index) { // 1-1 direct convert
+function flatConvert(in_table, out_table, index) { // 1-1 direct convert
     out_table.rodControl.querySelector(`input[data-index="${index}"]`).value = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value; // set the value without any math done to it
 }
 
-export function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
+function simpleGoalConvert(in_table, out_table, index) { // same logic as table test 1
     let pos = in_table.rodControl.querySelector(`input[data-index="${index}"]`).value; // get rod pos (0-255)
     let i = figureOutGoalBounds(in_table); // get min/max positions for goalie rod to block goal with middle man
     let o = figureOutGoalBounds(out_table); // get min/max positions for goalie rod to block goal with middle man
