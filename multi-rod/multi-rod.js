@@ -411,7 +411,7 @@ class Table {
 
     unbind(table) {
         let obj = this.boundChildren.find(e => e.table == table);
-        if (index !== undefined) {
+        if (obj !== undefined) {
             this.boundChildren.splice(this.boundChildren.indexOf(obj), 1);
             table.rodControl.querySelector(`input[data-index='0']`).parentElement.style.display = "";
             table.rodControl.querySelector(`input[data-index='7']`).parentElement.style.display = "";
@@ -424,7 +424,7 @@ class Table {
 
     unbindAll() {
         let tab = this;
-        this.boundChildren.forEach(e => tab.unbind(e));
+        this.boundChildren.forEach(e => tab.unbind(e.table));
     }
 
     reset(val = 127) {
