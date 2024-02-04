@@ -6,7 +6,7 @@ function inchestomm(inches) {
 function mmtoinches(inches) {
     return Math.round(inches / 25.4);
 }
-
+let addDemoPBControlButtons = true;
 let tables = [];
 let universalPadding = 20;
 let shrink = 4;
@@ -45,6 +45,45 @@ class Table {
         this.config = defaults;
         this.canvas = createElement("canvas");
         let rodControl = createElement("rodControl");
+        let table = this;
+        if (addDemoPBControlButtons) {
+            rodControl.add(
+                createElement("button", {
+                    innerHTML: "load",
+                    onclick: function () {
+                        table.loadDefense([
+                            [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            // [145, 145, 143, 145, 143, 97, 6, 6, 6, 6, 6, 6, 6, 11, 44, 95, 127, 147, 173, 229, 240, 240, 233, 183, 147, 125, 130, 154, 173, 169, 170, 182, 203, 233, 213, 64, 11, 147, 209, 88, 37, 152, 203, 196, 196, 197, 186, 33, 27, 165, 203, 175, 40, 47, 165, 203, 179, 206, 186, 162, 163, 190, 200, 163, 196, 204, 193, 210, 189, 156, 186, 186, 74, 24, 85, 142, 104, 150, 210, 196, 216, 182, 60, 51, 164, 145, 54, 98, 14, 11, 30, 53, 84, 130, 173, 204, 230, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 240, 223, 152, 97, 77, 77, 77],
+                            [110, 110, 112, 110, 112, 158, 249, 249, 249, 249, 249, 249, 249, 244, 211, 160, 128, 108, 82, 26, 15, 15, 22, 72, 108, 130, 125, 101, 82, 86, 85, 73, 52, 22, 42, 191, 244, 108, 46, 167, 218, 103, 52, 59, 59, 58, 69, 222, 228, 90, 52, 80, 215, 208, 90, 52, 76, 49, 69, 93, 92, 65, 55, 92, 59, 51, 62, 45, 66, 99, 69, 69, 181, 231, 170, 113, 151, 105, 45, 59, 39, 73, 195, 204, 91, 110, 201, 157, 241, 244, 225, 202, 171, 125, 82, 51, 25, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 32, 103, 158, 178, 178, 178], // this one is the first data set but mirrored
+                        ]);
+                        table.playDefense(16.3);
+                    }
+                }),
+                createElement("button", {
+                    innerHTML: "pause",
+                    onclick: function () {
+                        table.pauseDefense();
+                    }
+                }),
+                createElement("button", {
+                    innerHTML: "resume",
+                    onclick: function () {
+                        table.resumeDefense();
+                    }
+                }),
+                createElement("button", {
+                    innerHTML: "stop",
+                    onclick: function () {
+                        table.stopDefense();
+                    }
+                }),
+            );
+        }
         for (let i = 0; i < 8; i++) {
             let input = createElement("input", {
                 type: "range",
@@ -175,6 +214,15 @@ class Table {
                 ctx.fillRect(offsetx + wall + bumper + i * (man_spacing) + rodOffset + universalPadding, rodTop - 10 + universalPadding, man, 90);
             }
         }
+    }
+
+    /**
+     * 
+     * @param {Number} index rod index
+     * @returns 
+     */
+    getRodPos(index) {
+        return this.rodControl.querySelector(`[data-index="${index}"]`)?.value;
     }
 
     calculateCanvas() {
@@ -328,10 +376,12 @@ class Table {
             child.table.rodControl.querySelectorAll(`input[data-index]`).forEach(e => e.dispatchEvent(new Event("input")));
         });
     }
+
     boundChildren = [];
     isBoundTo(table) {
         return table.boundChildren.filter(e => e.table == this).length > 0;
     }
+
     /**
      * binds a table
      * @param {Table} table 
@@ -357,6 +407,121 @@ class Table {
         }
         table.rodControl.insertAdjacentElement("beforebegin", createElement("div", { innerHTML: label }));
 
+    }
+
+    unbind(table) {
+        let obj = this.boundChildren.find(e => e.table == table);
+        if (index !== undefined) {
+            this.boundChildren.splice(this.boundChildren.indexOf(obj), 1);
+            table.rodControl.querySelector(`input[data-index='0']`).parentElement.style.display = "";
+            table.rodControl.querySelector(`input[data-index='7']`).parentElement.style.display = "";
+            table.rodControl.style.display = "";
+            table.rodControl.previousElementSibling.remove();
+            return true;
+        }
+        return false;
+    }
+
+    unbindAll() {
+        let tab = this;
+        this.boundChildren.forEach(e => tab.unbind(e));
+    }
+
+    reset(val = 127) {
+        this.rodControl.querySelectorAll("input:not([style*=\"display: none;\"])").forEach(e => {
+            e.value = val;
+            e.dispatchEvent(new Event("input"));
+        });
+    }
+
+    playedPoints = [];
+    toBePlayed = [];
+    isPaused = false;
+    isPlayingBack = false;
+
+
+    loadDefense(arr) {
+        /*
+        arr is 2d array of defense points
+        first element is rod 0 points,
+        2nd element is rod 1, etc
+        [
+            [127, 100, 255, 123], // rod 0
+            [127, 100, 255, 123] // rod 1
+            etc...
+        ]
+        */
+        this.toBePlayed = arr;
+        this.isPaused = false;
+    }
+
+    #hasToBePlayed() {
+        for (let i of this.toBePlayed) {
+            if (i.length > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    playDefense(fps = 1) {
+        if (this.isPlayingBack) {
+            console.log("already playing");
+            return;
+        }
+        let table = this;
+        if (this.#hasToBePlayed()) {
+            if (this.isPaused) {
+                console.log("paused");
+                setTimeout(() => table.playDefense(fps), 100);
+                return;
+            }
+            // console.log("playing next defense frame");
+            this.isPlayingBack = true;
+            let arr = new Array(8).fill(0).map((e, n) => this.toBePlayed[n]?.shift() || []); // get array of first elements from toBePlayed arr
+            arr.forEach((val, i) => {
+                if (!Array.isArray(this.playedPoints[i])) {
+                    this.playedPoints[i] = [];
+                }
+                this.playedPoints[i].push(val);
+                // the next 4 lines are how you manually set a rod's position
+                let input = table.rodControl.querySelector(`[data-index="${i}"]`); // get the rod's input by index
+                if (input != undefined) { // if undefined, that rod doesn't exist (shouldn't ever happen)
+                    input.value = val; // set value
+                    input.dispatchEvent(new Event("input")); // trigger update
+                }
+            });
+            // console.log("setting timeout");
+            setTimeout(() => {
+                this.isPlayingBack = false;
+                table.playDefense(fps);
+            }, 1000 / fps);
+        } else {
+            this.playedPoints = [];
+            this.toBePlayed = [];
+            this.isPaused = false;
+            this.isPlayingBack = false;
+        }
+    }
+
+    pauseDefense() {
+        if (!this.#hasToBePlayed()) {
+            return;
+        }
+        this.isPlayingBack = false;
+        this.isPaused = true;
+    }
+
+    resumeDefense() {
+        this.isPlayingBack = false;
+        this.isPaused = false;
+    }
+
+    stopDefense() {
+        this.playedPoints = [];
+        this.toBePlayed = [];
+        this.isPaused = false;
+        this.isPlayingBack = false;
     }
 
 
